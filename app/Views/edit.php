@@ -9,28 +9,29 @@
 </head>
 <body class="bg-light d-flex justify-content-center align-items-center vh-50">
     <div class="container mt-5 bg-white p-5 rounded-5 border" style="width: 40rem"><!--container-->
-    <h3 class="text-center">Agregar nuevo libro</h3>
-        <form action="<?php echo base_url('/save')?>" method="post">
+    <h3 class="text-center">Editar Libro</h3>
+        <form action="<?php echo base_url('/update')?>" method="post">
         <?= csrf_field() ?>
+        <input type="hidden" name="id" value="<?=$libro['id']?>"/>
             <div class="form-group">
                 <label for="titulo" class="form-label">Titulo</label>
-                <input type="text" name="titulo" id="titulo" class="form-control" />
+                <input type="text" value="<?=$libro['titulo']?>" name="titulo" id="titulo" class="form-control" />
             </div>
             <div class="form-group">
                 <label for="autor" class="form-label">Autor</label>
-                <input type="text" name="autor" id="autor" class="form-control" />
+                <input type="text" value="<?=$libro['autor']?>" name="autor" id="autor" class="form-control" />
             </div>
             <div class="form-group">
                 <label for="editorial" class="form-label">Editorial</label>
-                <input type="text" name="editorial" id="editorial" class="form-control" />
+                <input type="text" value="<?=$libro['editorial']?>" name="editorial" id="editorial" class="form-control" />
             </div>
             <div class="form-group">
                 <label for="isbn" class="form-label">ISBN</label>
-                <input type="text" name="isbn" id="isbn" class="form-control" />
+                <input type="text" value="<?=$libro['isbn']?>" name="isbn" id="isbn" class="form-control" />
             </div>
             <div class="form-group">
                 <label for="precio" class="form-label">Precio</label>
-                <input type="text" name="precio" id="precio" class="form-control" />
+                <input type="text" value="<?=$libro['precio']?>" name="precio" id="precio" class="form-control" />
             </div>
             <div class="mt-2">
                  <button type="submit" class="btn btn-success"><i class="bi bi-check-lg"></i> Guardar</button>

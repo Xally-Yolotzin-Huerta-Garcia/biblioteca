@@ -9,11 +9,11 @@ class LibrosSeeder extends Seeder
     public function run()
     {
         $data = [
-            'titulo'    => 'El principito',
-            'autor'    => ' Antoine de Saint-Exupéry',
-            'editorial'    => 'Gran Travesía',
-            'isvn'    => '637378383',
-            'precio'    => '150',
+            'titulo'    => 'Secreto a voces',
+            'autor'    => 'Belva Plain',
+            'editorial'    => 'Naranja',
+            'isbn'    => '7363838237',
+            'precio'    => '225',
         ];
 
         // Insertar el nuevo usuario en la tabla 't_libros'

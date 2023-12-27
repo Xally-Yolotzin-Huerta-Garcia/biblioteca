@@ -27,7 +27,7 @@ class TLibros extends Migration
                 'type'       => 'VARCHAR',
                 'constraint' => '100',
             ],
-            'isvn' => [
+            'isbn' => [
                 'type'       => 'VARCHAR',
                 'constraint' => '100',
             ],
