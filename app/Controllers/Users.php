@@ -87,48 +87,6 @@ public function forgotPassword()
 
        
     }
-    public function resetPassword(){
-
-    $correo = $this->request->getPost('correo');
-
-    $userModel = new UserModel();
-    $user = $userModel->where('correo', $correo)->first();
-
-    if ($user) {
-        // Genera una nueva contraseña temporal
-        $newPassword = bin2hex(random_bytes(8)); // Genera una contraseña aleatoria
-
-        // Actualiza la contraseña en la base de datos
-        $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
-        $userModel->update($user['id'], ['password' => $hashedPassword]);
-
-        // Enviar correo electrónico utilizando PHPMailer
-        $mail = new PHPMailer(true); // Activa excepciones
-
-        try {
-            $mail->isSMTP();
-            $mail->Host = 'smtp.gmail.com';
-            $mail->SMTPAuth = true;
-            $mail->Username = 'yotzysalazar@gmail.com'; // Tu dirección de correo
-            $mail->Password = 'Xally2001'; // Tu contraseña de correo
-            $mail->SMTPSecure = 'tls';
-            $mail->Port = 587;
-
-            $mail->setFrom('yotzysalazar@gmail.com', 'Huerta Garcia Xally Yolotzin');
-            $mail->addAddress($correo);
-            $mail->Subject = 'Restablecimiento de Contraseña';
-            $mail->Body = 'Tu nueva contraseña es: ' . $newPassword;
-
-            $mail->send();
-            
-            echo 'Se ha enviado un correo electrónico con instrucciones para restablecer tu contraseña.';
-        } catch (Exception $e) {
-            echo 'Error al enviar el correo: ' . $mail->ErrorInfo;
-        }
-    } else {
-        echo 'El correo electrónico proporcionado no está registrado en nuestra plataforma.';
-    }
-}
 
     
 }
