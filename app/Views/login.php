@@ -18,7 +18,7 @@
         <div class="input-group-text bg-info">
           <img src="<?= base_url('assets/usuario.png'); ?>" alt="user-icon" style="height:1rem">
         </div>
-        <input class="form-control" type="email" name="email" placeholder="Correo" required>
+        <input class="form-control" type="email" name="correo" placeholder="Correo" required>
       </div>
       <div class="input-group mt-1">
         <div class="input-group-text bg-info">
@@ -26,11 +26,16 @@
         </div>
         <input class="form-control" type="password" name="password" placeholder="Contraseña" required>
       </div>
+      <div class="text-danger text-center">
+    <?php if (isset($error)) : ?>
+        <?= $error ?>
+    <?php endif; ?>
+</div>
       <div>
         <button class="btn btn-info w-100 text-white mt-3">Entrar</button>
       </div>
       <div class="pt-1">
-        <a class="text-decoration-none text-info fst-italic" href="<?php echo base_url('/forgot-password')?>">Olvidaste tu contraseña?</a>
+        <a class="text-decoration-none text-info fst-italic" href="<?php echo base_url('/forgotPassword')?>">Olvidaste tu contraseña?</a>
       </div>
       </form>
     </div><!--div container-->

@@ -8,14 +8,15 @@
   </head>
   <body class="bg-info d-flex justify-content-center align-items-center vh-100">
     <div class="bg-white p-5 rounded-5" style="width: 25rem">
-      <form action="<?php echo base_url('/inicio')?>" method="post">
+      <form action="<?php echo base_url('/resetPassword')?>" method="post">
+      <?= csrf_field() ?>
 
       <div class="text-center fs-1 fw-bold">Contraseña olvidada</div>
       <div class="input-group mt-3">
         <div class="input-group-text bg-info">
           <img src="<?= base_url('assets/usuario.png'); ?>" alt="user-icon" style="height:1rem">
         </div>
-        <input class="form-control" type="email" name="email" placeholder="Correo" required>
+        <input class="form-control" type="email" name="correo" placeholder="Correo" required>
       </div>
       <div>
         <button class="btn btn-info w-100 text-white mt-3">Enviar</button>

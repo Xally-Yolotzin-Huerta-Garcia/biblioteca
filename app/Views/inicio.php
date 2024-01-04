@@ -29,14 +29,14 @@
           <ul class="dropdown-menu bg-light">
             <li><a class="dropdown-item" href="#"><i class="bi bi-gear-wide-connected"></i> Configuración</a></li>
             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#"><i class="bi bi-box-arrow-left"></i> Cerrar sesión</a></li>
+            <li><a class="dropdown-item" href="<?= site_url('/logout') ?>"><i class="bi bi-box-arrow-left"></i> Cerrar sesión</a></li>
           </ul>
         </li>
        
       </ul>
       <form class="d-flex" role="search">
-        <input class="form-control me-2" type="search" placeholder="Busca tu libro aqui" aria-label="Search">
-        <button class="btn btn-success" type="submit"><i class="bi bi-search"></i></button>
+      <input id="searchInput" class="form-control me-2" type="search" placeholder="Busca tu libro aquí" aria-label="Search">
+      <button id="searchBtn" class="btn btn-success" type="button"><i class="bi bi-search"></i></button>
       </form>
     </div>
   </div>
@@ -51,6 +51,7 @@
         Agregar
 </a>
     </div>
+
       <div class="table-responsive rounded d-flex justify-content-center align-items-center">
       
         <table class="table table-light">
@@ -75,36 +76,112 @@
              
               <td><?=$libro['precio'];?></td>
               <td><a href="<?=base_url('edit/'.$libro['id']);?>" class="btn btn-primary"><i class="bi bi-pencil-square"></i></a>
-              <a href="<?=base_url('delete/'.$libro['id']);?>" class="btn btn-danger"><i class="bi bi-trash3-fill"></i></a></td>
+              <a href="#" class="btn btn-danger delete-book"
+                data-id="<?= $libro['id']; ?>"
+                data-title="<?= $libro['titulo']; ?>"
+                data-bs-toggle="modal" data-bs-target="#deleteModal">
+                <i class="bi bi-trash3-fill"></i>
+              </a>
+
             </tr>
             <?php endforeach;?>
           </tbody>
         </table>
       </div>
-      
-    </div>
-    
-    <!-- empieza contenido modal
 
-    <div class="modal" tabindex="-1" id="guardar">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Modal title</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <p>Modal body text goes here.</p>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-            <button type="button" class="btn btn-primary">Guardar</button>
+        <!-- Modal de confirmación -->
+        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Confirmar eliminación</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                ¿Estás seguro de que quieres eliminar este libro?
+                <p id="bookTitleToDelete"></p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <!-- Botón de confirmación dentro del modal -->
+                <button type="button" class="btn btn-danger" id="confirmDeleteBtnModal">Eliminar</button>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>  termina contenido modal-->
-    
-  
+    </div>
+
+    <!-- script de confirmación -->
+    <script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const deleteButtons = document.querySelectorAll('.delete-book');
+    const confirmDeleteButtonModal = document.getElementById('confirmDeleteBtnModal');
+    const bookTitleToDeleteElement = document.getElementById('bookTitleToDelete');
+
+    let bookIdToDelete = null;
+    let bookTitleToDelete = null;
+
+    deleteButtons.forEach(deleteButton => {
+      deleteButton.addEventListener('click', function(event) {
+        event.preventDefault();
+        bookIdToDelete = event.currentTarget.getAttribute('data-id');
+        bookTitleToDelete = event.currentTarget.getAttribute('data-title');
+        const deleteUrl = `<?= base_url('delete/') ?>${bookIdToDelete}`;
+
+        // Actualizar el título del libro en el modal
+        bookTitleToDeleteElement.textContent = `Título del libro: ${bookTitleToDelete}`;
+
+        // Mostrar el modal para confirmar la eliminación
+        $('#deleteModal').modal('show');
+      });
+    });
+
+    confirmDeleteButtonModal.addEventListener('click', function(event) {
+      event.preventDefault();
+      if (bookIdToDelete) {
+        const deleteUrl = `<?= base_url('delete/') ?>${bookIdToDelete}`;
+        fetch(deleteUrl, {
+          method: 'GET',
+          headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+          }
+        }).then(response => {
+          if (response.ok) {
+            window.location.reload();
+          }
+        }).catch(error => {
+          console.error('Error al eliminar el libro:', error);
+        });
+      }
+    });
+  });
+</script>
+
+<!-- script de busqueda de libros -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(function() {
+    $('#searchBtn').click(function() {
+      const searchTerm = $('#searchInput').val().trim(); // Obtener el término de búsqueda
+
+      // Realizar la solicitud AJAX al servidor
+      $.ajax({
+        type: 'GET',
+        url: '<?= base_url('search') ?>', // Ruta a tu controlador o función para buscar libros
+        data: { searchTerm: searchTerm }, // Enviar el término de búsqueda al servidor
+        success: function(response) {
+          // Manipular la respuesta del servidor (lista de libros encontrados)
+          console.log(response);
+          // Actualizar la vista con los resultados (puedes implementar esto según tus necesidades)
+        },
+        error: function(error) {
+          console.error('Error en la búsqueda:', error);
+        }
+      });
+    });
+  });
+</script>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
   </body>
 </html>
